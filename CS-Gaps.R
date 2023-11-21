@@ -323,15 +323,25 @@ aus_grid <- st_make_grid(bbox, cellsize = 0.25) %>%
   st_intersection(., aus) %>% 
   mutate(checklist_density = replace_na(checklist_density, 0))
 
-ggplot(data = aus_grid) +
-  geom_sf(aes(fill = checklist_density + 1), colour = NA) +
+rarest_species <- all_data %>% 
+  filter(reporting_rate < 0.001) %>% 
+  pull(species_binomial)
+
+rarest_centroids <- add_maps %>% 
+  st_make_valid() %>% 
+  st_centroid() %>% 
+  filter(species_binomial %in% rarest_species)
+
+ggplot() +
+  geom_sf(data = aus_grid, aes(fill = checklist_density + 1), colour = NA) +
   scale_fill_distiller(trans = "log", palette = "Spectral", limits = c(1, 100000), 
                        breaks = c(1, 10, 100, 1000, 10000, 100000),
                        labels = scales::comma) +
+  geom_sf(data = rarest_centroids) +
   theme_classic() +
   theme(legend.position = "bottom", legend.key.width = unit(3, "cm"), legend.title = element_blank())
 
-ggsave("FinalFigureS1.svg", width = 7, height = 6)
+ggsave("RawFigure2.svg", width = 7, height = 6)
 
 supp_data <- left_join(all_data, wlab, by = c("species_binomial" = "TaxonScientificName")) %>% 
   arrange(TaxonSort) %>% 
@@ -340,7 +350,7 @@ supp_data <- left_join(all_data, wlab, by = c("species_binomial" = "TaxonScienti
          species_binomial = as.character(species_binomial),
          area = formatC(area, format = "e", digits = 2),
          n_observations = formatC(n_observations, format = "e", digits = 2),
-         n_checklists = formatC(n_observations, format = "e", digits = 2),
+         n_checklists = formatC(n_checklists, format = "e", digits = 2),
          observation_density = formatC(observation_density, format = "e", digits = 2),
          checklist_density = formatC(checklist_density, format = "e", digits = 2),
          reporting_rate = formatC(reporting_rate, format = "e", digits = 2),
