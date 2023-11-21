@@ -52,5 +52,6 @@ rsconnect/
 /Data/*
 !/Data/TaxonomyFixerMaster.xlsx
 !/Data/TraitMaster.xlsx
+!/Data/TaxonomyUpdate.xlsx
 
 Data-Paths.R
