@@ -1,2 +1,1 @@
-# CS-Gaps-Australia
- 
+**This repository contains code for** Backstrom, L. J., Leseberg, N. P., Callaghan, C. T., Sanderson, C., Fuller, R. A., & Watson, J. E. (2024). Using citizen science to identify Australia’s least known birds and inform conservation action. _Emu-Austral Ornithology_, 124(2), 1-7.
